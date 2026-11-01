@@ -363,3 +363,12 @@ FodyWeavers.xsd
 
 #JetBrains Rider
 .idea/
+
+# Custom Project Secrets & Configuration
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+
+# Custom IDE files
+*.sln.iml
