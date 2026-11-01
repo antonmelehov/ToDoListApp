@@ -19,5 +19,5 @@ public class ErrorViewModel
     /// <summary>
     /// Gets a value indicating whether a request identifier is available.
     /// </summary>
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
 }
