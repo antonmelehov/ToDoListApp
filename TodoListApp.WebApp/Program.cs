@@ -17,9 +17,7 @@ _ = builder.Services.AddDbContext<UsersDbContext>(options =>
 _ = builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<UsersDbContext>();
 
-
 var app = builder.Build();
-
 
 if (app.Configuration.GetValue<bool>("DemoSeed:Enabled"))
 {
@@ -61,4 +59,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.Run();
+await app.RunAsync();
