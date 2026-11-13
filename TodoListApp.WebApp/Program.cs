@@ -20,6 +20,28 @@ _ = builder.Services.AddIdentityCore<IdentityUser>()
 
 var app = builder.Build();
 
+
+if (app.Configuration.GetValue<bool>("DemoSeed:Enabled"))
+{
+    if (!app.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException("Demo seeding requires Development.");
+    }
+
+    var password = app.Configuration["DemoSeed:Password"]
+                   ?? throw new InvalidOperationException("Set DemoSeed:Password using .NET User Secrets.");
+
+    var outputPath = app.Configuration["DemoSeed:OutputPath"]
+                     ?? throw new InvalidOperationException("Specify DemoSeed:OutputPath.");
+
+    await using var scope = app.Services.CreateAsyncScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    await DemoUserSeeder.SeedAsync(userManager, password, outputPath);
+    Console.WriteLine($"Demo user IDs written to {outputPath}");
+    return;
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

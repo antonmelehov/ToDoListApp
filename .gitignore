@@ -372,3 +372,6 @@ appsettings.Local.json
 
 # Custom IDE files
 *.sln.iml
+
+
+/demo-user-ids.local.json
