@@ -1,7 +1,22 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using TodoListApp.WebApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var usersConnectionString = builder.Configuration.GetConnectionString("UsersDb")
+                            ?? throw new InvalidOperationException(
+                                "Connection string 'UsersDb' is missing.");
+
+_ = builder.Services.AddDbContext<UsersDbContext>(options =>
+    options.UseSqlServer(usersConnectionString));
+
+_ = builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<UsersDbContext>();
+
 
 var app = builder.Build();
 
