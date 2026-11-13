@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using TodoListApp.WebApi.Data.Entities;
 
 namespace TodoListApp.WebApi.Data;
@@ -6,6 +7,10 @@ namespace TodoListApp.WebApi.Data;
 /// <summary>
 /// Provides access to the to-do application database.
 /// </summary>
+[SuppressMessage(
+    "Performance",
+    "CA1812",
+    Justification = "EF Core registers this context with AddDbContext and dependency injection creates it.")]
 internal sealed class TodoListDbContext : DbContext
 {
     /// <summary>
