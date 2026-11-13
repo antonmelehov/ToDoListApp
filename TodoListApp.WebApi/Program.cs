@@ -17,6 +17,24 @@ _ = builder.Services.AddDbContext<TodoListDbContext>(options => options.UseSqlSe
 
 var app = builder.Build();
 
+if (app.Configuration.GetValue<bool>("DemoSeed:Enabled"))
+{
+    if (!app.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException("Demo seeding requires Development.");
+    }
+
+    var inputPath = app.Configuration["DemoSeed:InputPath"]
+                    ?? throw new InvalidOperationException("Specify DemoSeed:InputPath.");
+
+    await using var scope = app.Services.CreateAsyncScope();
+    var db = scope.ServiceProvider.GetRequiredService<TodoListDbContext>();
+
+    await DemoDataSeeder.SeedAsync(db, inputPath);
+    Console.WriteLine("Demo lists are ready.");
+    return;
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -29,4 +47,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
